@@ -79,9 +79,9 @@ const handleInputChange = (keyType, newValue) => {
   } else if (currentKeyType === "result") {
     debugger;
     if (calculator.dataset.previousKey === "result") {
-      getActionKey(calculator.dataset.action);
-      previousValue = newValue < -2 ? previousValue.slice(2) : previousValue.slice(1);
-      previousValue = calculator.dataset.firstNumber + previousValue;
+      let actionKey = getActionKey(calculator.dataset.action);
+      let actionIndex = previousValue.lastIndexOf(actionKey);
+      previousValue = calculator.dataset.firstNumber + previousValue.slice(actionIndex);
       currentValue = newValue;
     } else {
       previousValue = previousValue + currentValue + "=";
