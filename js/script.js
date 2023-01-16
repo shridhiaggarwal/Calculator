@@ -44,6 +44,7 @@ const handleButtonClick = (e) => {
       //previousInput.innerHTML = firstNumber + keyValue + secondNumber + "=";
     }
     let result = getResult(firstNumber, operator, secondNumber);
+    result = (result==undefined || result==NaN)? currentInput.textContent : result;
     handleInputChange("result", result);
     calculator.dataset.firstNumber = result;
     calculator.dataset.secondNumber = secondNumber;
@@ -85,7 +86,7 @@ const handleInputChange = (keyType, newValue) => {
       currentValue = newValue;
     } else {
       previousValue = previousValue + currentValue + "=";
-      currentValue = newValue !== undefined ? newValue : currentValue;
+      currentValue = newValue;
     }
   } else {
     debugger;
@@ -131,8 +132,8 @@ const getActionKey = (operator) => {
     case "subtract":
       return "-";
     case "multiply":
-      return "*";
+      return "×";
     case "divide":
-      return "/";
+      return "÷";
   }
 };
