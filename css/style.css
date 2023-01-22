@@ -49,11 +49,17 @@ body p{
 .heading{
   width: 500px;
   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.heading img{
+  margin-right: 4px;
 }
 
 .heading p{
   color: var(--floralWhite);
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 }
 
 /* .hideElement{

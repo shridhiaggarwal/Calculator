@@ -33,18 +33,17 @@ const handleButtonClick = (e) => {
     calculator.dataset.previousKey = "reset";
   }
   if (action === "result") {
-    if (calculator.dataset.previousKey === "operator") {
-      return;
-    }
+    // if (calculator.dataset.previousKey === "operator") {
+    //   return;
+    // }
     let firstNumber = calculator.dataset.firstNumber;
     let operator = calculator.dataset.action;
     let secondNumber = currentInput.textContent;
     if (calculator.dataset.previousKey === "result") {
       secondNumber = calculator.dataset.secondNumber;
-      //previousInput.innerHTML = firstNumber + keyValue + secondNumber + "=";
     }
     let result = getResult(firstNumber, operator, secondNumber);
-    result = (result==undefined || result==NaN)? currentInput.textContent : result;
+    result = (result == undefined || result == NaN) ? currentInput.textContent : result;
     handleInputChange("result", result);
     calculator.dataset.firstNumber = result;
     calculator.dataset.secondNumber = secondNumber;
@@ -59,14 +58,13 @@ const handleInputChange = (keyType, newValue) => {
 
   console.log("currentKeyType", currentKeyType);
 
-  if (currentValue.includes(".") && newValue === ".") {
+  if (currentValue.includes(".") && keyType === "decimal") {
     debugger;
     return;
   }
 
   if (currentKeyType === "operator") {
     debugger;
-    // previousInput.classList.remove("hideElement");
     let lastchar = previousValue.charAt(previousValue.length - 1);
     if (operatorSet.has(lastchar) && currentValue === "0") {
       previousValue = previousValue.slice(0, -1) + newValue;
@@ -74,15 +72,16 @@ const handleInputChange = (keyType, newValue) => {
       let firstNumber = previousValue.slice(0, -1);
       previousValue = getResult(firstNumber, calculator.dataset.action, currentValue) + newValue;
     } else {
-      previousValue = previousValue + currentValue + newValue;
+      previousValue = currentValue + newValue;
     }
     currentValue = "0";
   } else if (currentKeyType === "result") {
     debugger;
     if (calculator.dataset.previousKey === "result") {
       let actionKey = getActionKey(calculator.dataset.action);
-      let actionIndex = previousValue.lastIndexOf(actionKey);
-      previousValue = calculator.dataset.firstNumber + previousValue.slice(actionIndex);
+      // let actionIndex = previousValue.lastIndexOf(actionKey);
+      // previousValue = calculator.dataset.firstNumber + previousValue.slice(actionIndex);
+      previousValue = calculator.dataset.firstNumber + actionKey + calculator.dataset.secondNumber + "="
       currentValue = newValue;
     } else {
       previousValue = previousValue + currentValue + "=";
@@ -90,7 +89,12 @@ const handleInputChange = (keyType, newValue) => {
     }
   } else {
     debugger;
-    if (currentValue === "0" && newValue !== ".") {
+    if (currentValue.length >= 16) {
+      return;
+    } else if (calculator.dataset.previousKey == "result") {
+      previousValue = null;
+      currentValue = "0";
+    } else if (currentValue === "0" && keyType !== "decimal") {
       currentValue = newValue;
     } else {
       currentValue = currentValue + newValue;
@@ -107,6 +111,10 @@ const handleInputChange = (keyType, newValue) => {
 const getResult = (firstNumber, operator, secondNumber) => {
   let first = Number(firstNumber);
   let second = Number(secondNumber);
+  if (!Number.isInteger(first) && !Number.isInteger(second)) {
+    let result = getFloatResults(firstNumber, operator, secondNumber);
+    return result;
+  }
   switch (operator) {
     case "add":
       return first + second;
@@ -119,10 +127,36 @@ const getResult = (firstNumber, operator, secondNumber) => {
   }
 };
 
+const getFloatResults = (firstNumber, operator, secondNumber) => {
+  let first = Number(firstNumber.split(".").join(""));
+  let second = Number(secondNumber.split(".").join(""));
+  let firstDecimalLength = firstNumber.split(".").pop().length;
+  let secondDecimalLength = secondNumber.split(".").pop().length;
+  let tenPower;
+  debugger;
+  switch (operator) {
+    case "add":
+      tenPower = firstDecimalLength > secondDecimalLength ? firstDecimalLength : secondDecimalLength;
+      return (first + second) / Math.pow(10, tenPower);
+    case "subtract":
+      tenPower = firstDecimalLength > secondDecimalLength ? firstDecimalLength : secondDecimalLength;
+      return (first - second) / Math.pow(10, tenPower);
+    case "multiply":
+      tenPower = firstDecimalLength + secondDecimalLength;
+      return (first * second) / Math.pow(10, tenPower);
+    case "divide":
+      tenPower = firstDecimalLength - secondDecimalLength;
+      return (first / second) / Math.pow(10, tenPower);
+  }
+}
+
 const handleResetChange = () => {
   previousInput.innerHTML = null;
-  // previousInput.classList.add("hideElement");
   currentInput.innerHTML = "0";
+  calculator.dataset.firstNumber = "";
+  calculator.dataset.secondNumber = "";
+  calculator.dataset.action = "";
+  calculator.dataset.previousKey = "";
 };
 
 const getActionKey = (operator) => {
