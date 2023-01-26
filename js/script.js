@@ -3,6 +3,13 @@ const buttons = document.querySelectorAll(".buttons td");
 const currentInput = document.getElementById("currentInput");
 const previousInput = document.getElementById("previousInput");
 const operatorSet = new Set(["+", "-", "×", "÷"]);
+const keyType = {
+  NUMBER: "number",
+  OPERATOR: "operator",
+  DECIMAL: "decimal",
+  RESET: "reset",
+  RESULT: "result",
+}
 
 for (let button of buttons) {
   button.addEventListener("click", (e) => handleButtonClick(e));
@@ -14,35 +21,32 @@ const handleButtonClick = (e) => {
   let keyValue = key.textContent;
 
   if (!action) {
-    handleInputChange("number", keyValue);
-    calculator.dataset.previousKey = "number";
+    handleInputChange(keyType.NUMBER, keyValue);
+    calculator.dataset.previousKey = keyType.NUMBER;
   }
   if (action === "add" || action === "subtract" || action === "multiply" || action === "divide") {
     calculator.dataset.action = action;
-    handleInputChange("operator", keyValue);
+    handleInputChange(keyType.OPERATOR, keyValue);
     calculator.dataset.firstNumber = previousInput.textContent.slice(0, -1);
-    calculator.dataset.previousKey = "operator";
+    calculator.dataset.previousKey = keyType.OPERATOR;
   }
   if (action === "decimal") {
-    handleInputChange("decimal", ".");
-    calculator.dataset.previousKey = "decimal";
+    handleInputChange(keyType.DECIMAL, ".");
+    calculator.dataset.previousKey = keyType.DECIMAL;
   }
   if (action === "reset") {
     handleResetChange();
-    calculator.dataset.previousKey = "reset";
+    calculator.dataset.previousKey = keyType.RESET;
   }
   if (action === "result") {
     let firstNumber = calculator.dataset.firstNumber;
     let operator = calculator.dataset.action;
-    let secondNumber = currentInput.textContent;
-    if (calculator.dataset.previousKey === "result") {
-      secondNumber = calculator.dataset.secondNumber;
-    }
+    let secondNumber = calculator.dataset.previousKey === keyType.RESULT ? calculator.dataset.secondNumber : currentInput.textContent;
     let result = getResult(firstNumber, operator, secondNumber);
-    handleInputChange("result", result);
+    handleInputChange(keyType.RESULT, result);
     calculator.dataset.firstNumber = result;
     calculator.dataset.secondNumber = secondNumber;
-    calculator.dataset.previousKey = "result";
+    calculator.dataset.previousKey = keyType.RESULT;
   }
 };
 
@@ -50,7 +54,7 @@ const handleInputChange = (currentKeyType, newValue) => {
   let currentValue = currentInput.textContent;
   let previousValue = previousInput.textContent;
 
-  if (currentKeyType === "operator") {
+  if (currentKeyType === keyType.OPERATOR) {
     let lastchar = previousValue.charAt(previousValue.length - 1);
     if (operatorSet.has(lastchar) && currentValue === "0") {
       previousValue = calculator.dataset.firstNumber + newValue;
@@ -60,11 +64,11 @@ const handleInputChange = (currentKeyType, newValue) => {
       previousValue = currentValue + newValue;
     }
     currentValue = "0";
-  } else if (currentKeyType === "result") {
+  } else if (currentKeyType === keyType.RESULT) {
     if (newValue == undefined || newValue == NaN) {
       previousValue = currentValue + "=";
       currentValue = currentValue;
-    } else if (calculator.dataset.previousKey === "result") {
+    } else if (calculator.dataset.previousKey === keyType.RESULT) {
       let actionKey = getActionKey(calculator.dataset.action);
       previousValue = calculator.dataset.firstNumber + actionKey + calculator.dataset.secondNumber + "="
       currentValue = newValue;
@@ -72,13 +76,13 @@ const handleInputChange = (currentKeyType, newValue) => {
       previousValue = previousValue + currentValue + "=";
       currentValue = newValue;
     }
-  } else if (currentKeyType === "decimal") {
+  } else if (currentKeyType === keyType.DECIMAL) {
     if (currentValue.includes(".")) {
       return;
-    } else if (calculator.dataset.previousKey == "result") {
+    } else if (calculator.dataset.previousKey == keyType.RESULT) {
       previousValue = null;
       currentValue = "0" + newValue;
-    } else if (calculator.dataset.previousKey == "operator") {
+    } else if (calculator.dataset.previousKey == keyType.OPERATOR) {
       currentValue = "0" + newValue;
     } else {
       currentValue = currentValue + newValue;
@@ -86,7 +90,7 @@ const handleInputChange = (currentKeyType, newValue) => {
   } else {
     if (currentValue.length >= 16) {
       return;
-    } else if (calculator.dataset.previousKey == "result") {
+    } else if (calculator.dataset.previousKey == keyType.RESULT) {
       previousValue = null;
       currentValue = newValue;
     } else if (currentValue === "0") {
