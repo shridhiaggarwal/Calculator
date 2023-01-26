@@ -12,7 +12,6 @@ const handleButtonClick = (e) => {
   const key = e.target;
   const action = key.dataset.action;
   let keyValue = key.textContent;
-  console.log("keyValue", keyValue);
 
   if (!action) {
     handleInputChange("number", keyValue);
@@ -33,9 +32,6 @@ const handleButtonClick = (e) => {
     calculator.dataset.previousKey = "reset";
   }
   if (action === "result") {
-    // if (calculator.dataset.previousKey === "operator") {
-    //   return;
-    // }
     let firstNumber = calculator.dataset.firstNumber;
     let operator = calculator.dataset.action;
     let secondNumber = currentInput.textContent;
@@ -43,7 +39,6 @@ const handleButtonClick = (e) => {
       secondNumber = calculator.dataset.secondNumber;
     }
     let result = getResult(firstNumber, operator, secondNumber);
-    result = (result == undefined || result == NaN) ? currentInput.textContent : result;
     handleInputChange("result", result);
     calculator.dataset.firstNumber = result;
     calculator.dataset.secondNumber = secondNumber;
@@ -51,58 +46,55 @@ const handleButtonClick = (e) => {
   }
 };
 
-const handleInputChange = (keyType, newValue) => {
+const handleInputChange = (currentKeyType, newValue) => {
   let currentValue = currentInput.textContent;
   let previousValue = previousInput.textContent;
-  let currentKeyType = keyType;
-
-  console.log("currentKeyType", currentKeyType);
-
-  if (currentValue.includes(".") && keyType === "decimal") {
-    debugger;
-    return;
-  }
 
   if (currentKeyType === "operator") {
-    debugger;
     let lastchar = previousValue.charAt(previousValue.length - 1);
     if (operatorSet.has(lastchar) && currentValue === "0") {
-      previousValue = previousValue.slice(0, -1) + newValue;
+      previousValue = calculator.dataset.firstNumber + newValue;
     } else if (operatorSet.has(lastchar) && currentValue !== "0") {
-      let firstNumber = previousValue.slice(0, -1);
-      previousValue = getResult(firstNumber, calculator.dataset.action, currentValue) + newValue;
+      previousValue = getResult(calculator.dataset.firstNumber, calculator.dataset.action, currentValue) + newValue;
     } else {
       previousValue = currentValue + newValue;
     }
     currentValue = "0";
   } else if (currentKeyType === "result") {
-    debugger;
-    if (calculator.dataset.previousKey === "result") {
+    if (newValue == undefined || newValue == NaN) {
+      previousValue = currentValue + "=";
+      currentValue = currentValue;
+    } else if (calculator.dataset.previousKey === "result") {
       let actionKey = getActionKey(calculator.dataset.action);
-      // let actionIndex = previousValue.lastIndexOf(actionKey);
-      // previousValue = calculator.dataset.firstNumber + previousValue.slice(actionIndex);
       previousValue = calculator.dataset.firstNumber + actionKey + calculator.dataset.secondNumber + "="
       currentValue = newValue;
     } else {
       previousValue = previousValue + currentValue + "=";
       currentValue = newValue;
     }
+  } else if (currentKeyType === "decimal") {
+    if (currentValue.includes(".")) {
+      return;
+    } else if (calculator.dataset.previousKey == "result") {
+      previousValue = null;
+      currentValue = "0" + newValue;
+    } else if (calculator.dataset.previousKey == "operator") {
+      currentValue = "0" + newValue;
+    } else {
+      currentValue = currentValue + newValue;
+    }
   } else {
-    debugger;
     if (currentValue.length >= 16) {
       return;
     } else if (calculator.dataset.previousKey == "result") {
       previousValue = null;
-      currentValue = "0";
-    } else if (currentValue === "0" && keyType !== "decimal") {
+      currentValue = newValue;
+    } else if (currentValue === "0") {
       currentValue = newValue;
     } else {
       currentValue = currentValue + newValue;
     }
   }
-
-  console.log("currentValue", currentValue);
-  console.log("previousValue", previousValue);
 
   previousInput.innerHTML = previousValue;
   currentInput.innerHTML = currentValue;
@@ -133,7 +125,6 @@ const getFloatResults = (firstNumber, operator, secondNumber) => {
   let firstDecimalLength = firstNumber.split(".").pop().length;
   let secondDecimalLength = secondNumber.split(".").pop().length;
   let tenPower;
-  debugger;
   switch (operator) {
     case "add":
       tenPower = firstDecimalLength > secondDecimalLength ? firstDecimalLength : secondDecimalLength;
