@@ -2,20 +2,22 @@
   --sm: 576px;
   --md: 768px;
   --lg: 1024px;
-  --box-shadow: rgba(207, 207, 207, 0.75);
   /* colors */
-  --white: #fff;
-  --black: #000;
-  --floralWhite: #faf8f1;
+  --floral_white: #faf8f1;
   --raisin_black: #222222;
   --outer_space: #454545;
+  /* dark theme */
   --police_blue: #3a4764;
   --dark_gunmetal: #182034;
   --dark_blue_gray: #637097;
+  /* buttons theme */
   --persian_red: #d13f30;
-  --yankees_blue: #242c44;
-  --dark_grey: #A9A9A9;
-  --vivid_auburn: #92271B;
+  --dark_grey: #A9A9A9; /* with floral_white */
+  --police_blue2: #404e76; /* with dark_blue_gray */
+  --vivid_auburn: #92271B; /* with persian_red */
+  --davy_grey: #555555; /* button active */
+  /* light theme */
+  --american_silver: #CFCED3;
 }
 
 /* ============================== main and common css ============================== */
@@ -28,7 +30,6 @@ body {
   align-items: center;
   justify-content: center;
   font-family: "Source Sans Pro", sans-serif;
-  letter-spacing: 5px;
   font-size: 1.8rem;
 }
 
@@ -40,43 +41,99 @@ body p{
   padding: 12px;
   width: 480px;
   background-color: var(--dark_gunmetal);
-  border: 1px solid var(--dark_gunmetal);
+  border: none;
   border-radius: 8px;
   -webkit-box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
-.heading{
+/* ============================== header css ============================== */
+.header{
   width: 500px;
   margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headingText{
   display: flex;
   align-items: center;
 }
 
-.heading img{
+.headingText img{
   margin-right: 4px;
 }
 
-.heading p{
-  color: var(--floralWhite);
-  font-size: 1.2rem;
+.headingText p{
+  color: var(--floral_white);
+  font-size: 1.4rem;
 }
 
-/* .hideElement{
-  visibility: hidden;
-} */
+.switch{
+  position: relative;
+  width: 60px;
+  height: 35px;
+}
+
+.switch input{
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider{
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--dark_gunmetal);
+  border-radius: 16px;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before{
+  position: absolute;
+  content: "";
+  width: 24px;
+  height: 24px;
+  left: 6px;
+  bottom: 5px;
+  background-color: var(--dark_blue_gray);
+  border-radius: 50%;
+  background-image: url(https://img.icons8.com/sf-regular/20/faf8f1/light.png); /*floralwhite*/
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--american_silver);
+}
+
+input:checked + .slider:before {
+  background-color: var(--floral_white);
+  background-image: url(https://img.icons8.com/sf-regular/20/454545/light-on.png); /*outerSpace*/
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
 
 /* ============================== display css ============================== */
 #input {
-  /* width: 400px; */
-  /* height: 90px; */
   margin: 12px;
   padding: 16px 8px 16px 8px;
   text-align: right;
   overflow-x: auto;
   border: none;
   border-radius: 8px;
-  color: var(--floralWhite);
+  color: var(--floral_white);
   background-color: var(--dark_blue_gray);
   opacity: 0.8;
   transition: all 0.2s ease-in-out;
@@ -116,28 +173,43 @@ td {
 }
 
 .button {
-  /* width: 100%;
-  height: 100%;
-  font-size: inherit; */
   color: var(--outer_space);
-  background-color: var(--floralWhite);
+  background-color: var(--floral_white);
   border-bottom: 4px solid var(--dark_grey);
   border-radius: 8px;
 }
 
 .button:active {
-  box-shadow: inset 2px 2px 5px #555555;
+  box-shadow: inset 2px 2px 5px var(--davy_grey);
   border: none;
 }
 
 .reset {
-  color: var(--floralWhite);
+  color: var(--floral_white);
   background-color: var(--dark_blue_gray);
-  border-bottom: 4px solid #404e76;
+  border-bottom: 4px solid var(--police_blue2);
 }
 
 .result {
-  color: var(--floralWhite);
+  color: var(--floral_white);
   background-color: var(--persian_red);
   border-bottom: 4px solid var(--vivid_auburn);
+}
+
+/* ============================== light theme css ============================== */
+.lightBody{
+  background-color: var(--floral_white);
+}
+
+.lightCalculator{
+  background-color: var(--american_silver);
+}
+
+.lightInput {
+  color: var(--outer_space) !important;
+  background-color: var(--floral_white) !important;
+}
+
+.lightBlackText{
+  color: var(--outer_space) !important;
 }
