@@ -12,12 +12,12 @@
   --dark_blue_gray: #637097;
   /* buttons theme */
   --persian_red: #d13f30;
-  --dark_grey: #A9A9A9; /* with floral_white */
+  --dark_grey: #a9a9a9; /* with floral_white */
   --police_blue2: #404e76; /* with dark_blue_gray */
-  --vivid_auburn: #92271B; /* with persian_red */
+  --vivid_auburn: #92271b; /* with persian_red */
   --davy_grey: #555555; /* button active */
   /* light theme */
-  --american_silver: #CFCED3;
+  --american_silver: #cfced3;
 }
 
 /* ============================== main and common css ============================== */
@@ -33,7 +33,7 @@ body {
   font-size: 1.8rem;
 }
 
-body p{
+body p {
   margin: 0px;
 }
 
@@ -48,7 +48,7 @@ body p{
 }
 
 /* ============================== header css ============================== */
-.header{
+.header {
   width: 500px;
   margin-bottom: 16px;
   display: flex;
@@ -56,33 +56,33 @@ body p{
   align-items: center;
 }
 
-.headingText{
+.headingText {
   display: flex;
   align-items: center;
 }
 
-.headingText img{
+.headingText img {
   margin-right: 4px;
 }
 
-.headingText p{
+.headingText p {
   color: var(--floral_white);
   font-size: 1.4rem;
 }
 
-.switch{
+.switch {
   position: relative;
   width: 60px;
   height: 35px;
 }
 
-.switch input{
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.slider{
+.slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -91,11 +91,11 @@ body p{
   bottom: 0;
   background-color: var(--dark_gunmetal);
   border-radius: 16px;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
-.slider:before{
+.slider:before {
   position: absolute;
   content: "";
   width: 24px;
@@ -107,8 +107,8 @@ body p{
   background-image: url(https://img.icons8.com/sf-regular/20/faf8f1/light.png); /*floralwhite*/
   background-repeat: no-repeat;
   background-position: center;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
@@ -148,13 +148,13 @@ input:checked + .slider:before {
   outline: none;
 }
 
-#previousInput{
+#previousInput {
   height: 22px;
   font-size: 1rem;
   padding-bottom: 4px;
 }
 
-#currentInput{
+#currentInput {
   font-size: 2.5rem;
 }
 
@@ -197,11 +197,11 @@ td {
 }
 
 /* ============================== light theme css ============================== */
-.lightBody{
+.lightBody {
   background-color: var(--floral_white);
 }
 
-.lightCalculator{
+.lightCalculator {
   background-color: var(--american_silver);
 }
 
@@ -210,6 +210,6 @@ td {
   background-color: var(--floral_white) !important;
 }
 
-.lightBlackText{
+.lightBlackText {
   color: var(--outer_space) !important;
 }

@@ -1,8 +1,8 @@
 const themeCheckBox = document.getElementById("themeCheckBox");
 
 themeCheckBox.addEventListener("click", (e) => {
-    if(e.target.tagName == "INPUT"){
-        if(e.target.checked){
+    if (e.target.tagName == "INPUT") {
+        if (e.target.checked) {
             document.body.classList.add("lightBody");
             document.getElementById("calculatorIcon").src = "https://img.icons8.com/fluency-systems-regular/26/454545/calculator.png"; //outerSpace
             document.querySelector(".headingText p").classList.add("lightBlackText");
