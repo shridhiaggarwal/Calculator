@@ -11,13 +11,11 @@ const keyType = {
   RESULT: "result",
 }
 
-// document.addEventListener('keydown', (event) => {
-//   console.log("keyboard", event)
-//   var name = event.key;
-//   var code = event.code;
-//   // Alert the key name and key code on keydown
-//   console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
-// }, false);
+document.addEventListener('keydown', (event) => {
+  const keyValue = event.key;
+  const currentKeyType = getKeyType(keyValue);
+  handleButtonClick(keyValue, currentKeyType);
+}, false);
 
 for (let button of buttons) {
   button.addEventListener("click", (e) => {
@@ -25,21 +23,19 @@ for (let button of buttons) {
     const action = key.dataset.action;
     const currentKeyType = getKeyType(action);
     const keyValue = key.textContent;
-    handleButtonClick(action, keyValue, currentKeyType);
+    handleButtonClick(keyValue, currentKeyType);
   });
 }
 
-const handleButtonClick = (action, keyValue, currentKeyType) => {
-  // console.log("clicked keyType", currentKeyType);
-  // debugger;
+const handleButtonClick = (keyValue, currentKeyType) => {
 
   if (currentKeyType === keyType.NUMBER) {
     handleInputChange(currentKeyType, keyValue);
     calculator.dataset.previousKey = keyType.NUMBER;
   }
   if (currentKeyType === keyType.OPERATOR) {
-    calculator.dataset.action = action;
-    handleInputChange(currentKeyType, keyValue);
+    calculator.dataset.action = getOperatorSign(keyValue);
+    handleInputChange(currentKeyType, calculator.dataset.action);
     calculator.dataset.firstNumber = previousInput.textContent.slice(0, -1);
     calculator.dataset.previousKey = keyType.OPERATOR;
   }
@@ -83,8 +79,7 @@ const handleInputChange = (currentKeyType, newValue) => {
       previousValue = currentValue + "=";
       currentValue = currentValue;
     } else if (calculator.dataset.previousKey === keyType.RESULT) {
-      let actionKey = getActionKey(calculator.dataset.action);
-      previousValue = calculator.dataset.firstNumber + actionKey + calculator.dataset.secondNumber + "="
+      previousValue = calculator.dataset.firstNumber + calculator.dataset.action + calculator.dataset.secondNumber + "="
       currentValue = newValue;
     } else {
       previousValue = previousValue + currentValue + "=";
@@ -127,13 +122,13 @@ const getResult = (firstNumber, operator, secondNumber) => {
     return result;
   }
   switch (operator) {
-    case "add":
+    case "+":
       return first + second;
-    case "subtract":
+    case "-":
       return first - second;
-    case "multiply":
+    case "×":
       return first * second;
-    case "divide":
+    case "÷":
       return first / second;
   }
 };
@@ -146,16 +141,16 @@ const getFloatResults = (firstNumber, operator, secondNumber) => {
   let secondDecimalLength = secondNumber.split(".").pop().length;
   let tenPower;
   switch (operator) {
-    case "add":
+    case "+":
       tenPower = firstDecimalLength > secondDecimalLength ? firstDecimalLength : secondDecimalLength;
       return (first + second) / Math.pow(10, tenPower);
-    case "subtract":
+    case "-":
       tenPower = firstDecimalLength > secondDecimalLength ? firstDecimalLength : secondDecimalLength;
       return (first - second) / Math.pow(10, tenPower);
-    case "multiply":
+    case "×":
       tenPower = firstDecimalLength + secondDecimalLength;
       return (first * second) / Math.pow(10, tenPower);
-    case "divide":
+    case "÷":
       tenPower = firstDecimalLength - secondDecimalLength;
       return (first / second) / Math.pow(10, tenPower);
   }
@@ -171,16 +166,16 @@ const handleResetChange = () => {
   calculator.dataset.previousKey = "";
 };
 
-const getActionKey = (operator) => {
+const getOperatorSign = (operator) => {
   switch (operator) {
-    case "add":
+    case "+":
       return "+";
-    case "subtract":
+    case "-":
       return "-";
-    case "multiply":
+    case "×":
     case "*":
       return "×";
-    case "divide":
+    case "÷":
     case "/":
       return "÷";
   }
