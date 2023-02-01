@@ -186,7 +186,7 @@ const getOperatorSign = (operator) => {
 };
 
 const getKeyType = (action) => {
-  if (!action || action.match(/[0-9]/g)) {
+  if (action === "number" || action.match(/[0-9]/g)) {
     return keyType.NUMBER;
   }
   if (action === "add" || action === "subtract" || action === "multiply" || action === "divide" || action === "+" || action === "-" || action === "*" || action === "/") {
