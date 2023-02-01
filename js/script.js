@@ -12,7 +12,7 @@ const keyType = {
 }
 
 // document.addEventListener('keydown', (event) => {
-//   console.log("clicked event", event)
+//   console.log("keyboard", event)
 //   var name = event.key;
 //   var code = event.code;
 //   // Alert the key name and key code on keydown
@@ -20,39 +20,43 @@ const keyType = {
 // }, false);
 
 for (let button of buttons) {
-  button.addEventListener("click", (e) => handleButtonClick(e));
+  button.addEventListener("click", (e) => {
+    const key = e.target;
+    const action = key.dataset.action;
+    const currentKeyType = getKeyType(action);
+    const keyValue = key.textContent;
+    handleButtonClick(action, keyValue, currentKeyType);
+  });
 }
 
-const handleButtonClick = (e) => {
-  // console.log("clicked event", e)
-  const key = e.target;
-  const action = key.dataset.action;
-  let keyValue = key.textContent;
+const handleButtonClick = (action, keyValue, currentKeyType) => {
+  // console.log("clicked keyType", currentKeyType);
+  // debugger;
 
-  if (!action) {
-    handleInputChange(keyType.NUMBER, keyValue);
+  if (currentKeyType === keyType.NUMBER) {
+    handleInputChange(currentKeyType, keyValue);
     calculator.dataset.previousKey = keyType.NUMBER;
   }
-  if (action === "add" || action === "subtract" || action === "multiply" || action === "divide") {
+  if (currentKeyType === keyType.OPERATOR) {
     calculator.dataset.action = action;
-    handleInputChange(keyType.OPERATOR, keyValue);
+    handleInputChange(currentKeyType, keyValue);
     calculator.dataset.firstNumber = previousInput.textContent.slice(0, -1);
     calculator.dataset.previousKey = keyType.OPERATOR;
   }
-  if (action === "decimal") {
-    handleInputChange(keyType.DECIMAL, ".");
+  if (currentKeyType === keyType.DECIMAL) {
+    handleInputChange(currentKeyType, ".");
     calculator.dataset.previousKey = keyType.DECIMAL;
   }
-  if (action === "reset") {
+  if (currentKeyType === keyType.RESET) {
     handleResetChange();
     calculator.dataset.previousKey = keyType.RESET;
   }
-  if (action === "result") {
+  if (currentKeyType === keyType.RESULT) {
     let firstNumber = calculator.dataset.firstNumber;
     let operator = calculator.dataset.action;
     let secondNumber = calculator.dataset.previousKey === keyType.RESULT ? calculator.dataset.secondNumber : currentInput.textContent;
     let result = getResult(firstNumber, operator, secondNumber);
-    handleInputChange(keyType.RESULT, result);
+    handleInputChange(currentKeyType, result);
     calculator.dataset.firstNumber = result;
     calculator.dataset.secondNumber = secondNumber;
     calculator.dataset.previousKey = keyType.RESULT;
@@ -174,8 +178,28 @@ const getActionKey = (operator) => {
     case "subtract":
       return "-";
     case "multiply":
+    case "*":
       return "×";
     case "divide":
+    case "/":
       return "÷";
   }
 };
+
+const getKeyType = (action) => {
+  if (!action || action.match(/[0-9]/g)) {
+    return keyType.NUMBER;
+  }
+  if (action === "add" || action === "subtract" || action === "multiply" || action === "divide" || action === "+" || action === "-" || action === "*" || action === "/") {
+    return keyType.OPERATOR;
+  }
+  if (action === "decimal" || action === ".") {
+    return keyType.DECIMAL;
+  }
+  if (action === "reset" || action === "C" || action === "c") {
+    return keyType.RESET;
+  }
+  if (action === "result" || action === "Enter" || action === "=") {
+    return keyType.RESULT
+  }
+}
