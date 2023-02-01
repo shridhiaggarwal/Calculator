@@ -37,6 +37,13 @@ body p {
   margin: 0px;
 }
 
+.prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE */
+  user-select: none; /* Standard syntax */
+}
+
 .calculator {
   padding: 12px;
   width: 480px;

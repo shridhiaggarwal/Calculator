@@ -11,11 +11,20 @@ const keyType = {
   RESULT: "result",
 }
 
+// document.addEventListener('keydown', (event) => {
+//   console.log("clicked event", event)
+//   var name = event.key;
+//   var code = event.code;
+//   // Alert the key name and key code on keydown
+//   console.log(`Key pressed ${name} \r\n Key code value: ${code}`);
+// }, false);
+
 for (let button of buttons) {
   button.addEventListener("click", (e) => handleButtonClick(e));
 }
 
 const handleButtonClick = (e) => {
+  // console.log("clicked event", e)
   const key = e.target;
   const action = key.dataset.action;
   let keyValue = key.textContent;
@@ -50,6 +59,7 @@ const handleButtonClick = (e) => {
   }
 };
 
+// handle display changes - current and previous input
 const handleInputChange = (currentKeyType, newValue) => {
   let currentValue = currentInput.textContent;
   let previousValue = previousInput.textContent;
@@ -104,6 +114,7 @@ const handleInputChange = (currentKeyType, newValue) => {
   currentInput.innerHTML = currentValue;
 };
 
+// calculate result
 const getResult = (firstNumber, operator, secondNumber) => {
   let first = Number(firstNumber);
   let second = Number(secondNumber);
@@ -123,6 +134,7 @@ const getResult = (firstNumber, operator, secondNumber) => {
   }
 };
 
+// calculate float result
 const getFloatResults = (firstNumber, operator, secondNumber) => {
   let first = Number(firstNumber.split(".").join(""));
   let second = Number(secondNumber.split(".").join(""));
@@ -145,6 +157,7 @@ const getFloatResults = (firstNumber, operator, secondNumber) => {
   }
 }
 
+// handle reset calculator
 const handleResetChange = () => {
   previousInput.innerHTML = null;
   currentInput.innerHTML = "0";
