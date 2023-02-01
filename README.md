@@ -1,4 +1,4 @@
-# Calculator <img src="https://img.icons8.com/office/35/null/calculator.png"/>
+# Calculator <img src="https://img.icons8.com/office/40/null/calculator.png"/>
 
 A calculator made using HTML, CSS, JavaScript.
 * It supports both mouse and keyboard events.
