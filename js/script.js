@@ -11,12 +11,14 @@ const keyType = {
   RESULT: "result",
 }
 
+// handle keyboard events
 document.addEventListener('keydown', (event) => {
   const keyValue = event.key;
   const currentKeyType = getKeyType(keyValue);
   handleButtonClick(keyValue, currentKeyType);
 }, false);
 
+// handle mouse events
 for (let button of buttons) {
   button.addEventListener("click", (e) => {
     const key = e.target;
@@ -27,8 +29,8 @@ for (let button of buttons) {
   });
 }
 
+// handle events based on currentKeyType
 const handleButtonClick = (keyValue, currentKeyType) => {
-
   if (currentKeyType === keyType.NUMBER) {
     handleInputChange(currentKeyType, keyValue);
     calculator.dataset.previousKey = keyType.NUMBER;
@@ -89,6 +91,7 @@ const handleInputChange = (currentKeyType, newValue) => {
     if (currentValue.includes(".")) {
       return;
     } else if (calculator.dataset.previousKey == keyType.RESULT) {
+      handleResetChange();
       previousValue = null;
       currentValue = "0" + newValue;
     } else if (calculator.dataset.previousKey == keyType.OPERATOR) {
@@ -100,6 +103,7 @@ const handleInputChange = (currentKeyType, newValue) => {
     if (currentValue.length >= 16) {
       return;
     } else if (calculator.dataset.previousKey == keyType.RESULT) {
+      handleResetChange();
       previousValue = null;
       currentValue = newValue;
     } else if (currentValue === "0") {
