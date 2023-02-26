@@ -119,46 +119,19 @@ const handleInputChange = (currentKeyType, newValue) => {
 
 // calculate result
 const getResult = (firstNumber, operator, secondNumber) => {
-  let first = Number(firstNumber);
-  let second = Number(secondNumber);
-  if (!Number.isInteger(first) && !Number.isInteger(second)) {
-    let result = getFloatResults(firstNumber, operator, secondNumber);
-    return result;
-  }
+  let first = BigNumber(firstNumber);
+  let second = BigNumber(secondNumber);
   switch (operator) {
     case "+":
-      return first + second;
+      return first.plus(second);
     case "-":
-      return first - second;
+      return first.minus(second);
     case "×":
-      return first * second;
+      return first.multipliedBy(second);
     case "÷":
-      return first / second;
+      return first.dividedBy(second);
   }
 };
-
-// calculate float result
-const getFloatResults = (firstNumber, operator, secondNumber) => {
-  let first = Number(firstNumber.split(".").join(""));
-  let second = Number(secondNumber.split(".").join(""));
-  let firstDecimalLength = firstNumber.split(".").pop().length;
-  let secondDecimalLength = secondNumber.split(".").pop().length;
-  let tenPower;
-  switch (operator) {
-    case "+":
-      tenPower = firstDecimalLength > secondDecimalLength ? firstDecimalLength : secondDecimalLength;
-      return (first + second) / Math.pow(10, tenPower);
-    case "-":
-      tenPower = firstDecimalLength > secondDecimalLength ? firstDecimalLength : secondDecimalLength;
-      return (first - second) / Math.pow(10, tenPower);
-    case "×":
-      tenPower = firstDecimalLength + secondDecimalLength;
-      return (first * second) / Math.pow(10, tenPower);
-    case "÷":
-      tenPower = firstDecimalLength - secondDecimalLength;
-      return (first / second) / Math.pow(10, tenPower);
-  }
-}
 
 // handle reset calculator
 const handleResetChange = () => {
@@ -186,7 +159,7 @@ const getOperatorSign = (operator) => {
 };
 
 const getKeyType = (action) => {
-  if (action === "number" || action.match(/[0-9]/g)) {
+  if (action === "number" || /^\d+$/.test(action)) {
     return keyType.NUMBER;
   }
   if (action === "add" || action === "subtract" || action === "multiply" || action === "divide" || action === "+" || action === "-" || action === "*" || action === "/") {
