@@ -36,8 +36,8 @@ const handleButtonClick = (keyValue, currentKeyType) => {
     calculator.dataset.previousKey = keyType.NUMBER;
   }
   if (currentKeyType === keyType.OPERATOR) {
+    handleInputChange(currentKeyType, getOperatorSign(keyValue));
     calculator.dataset.action = getOperatorSign(keyValue);
-    handleInputChange(currentKeyType, calculator.dataset.action);
     calculator.dataset.firstNumber = previousInput.textContent.slice(0, -1);
     calculator.dataset.previousKey = keyType.OPERATOR;
   }
